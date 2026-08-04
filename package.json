@@ -1,0 +1,23 @@
+{
+  "name": "glowlistbackend_",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/putriarmitha77-cmyk/glowlistbackend_.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/putriarmitha77-cmyk/glowlistbackend_/issues"
+  },
+  "homepage": "https://github.com/putriarmitha77-cmyk/glowlistbackend_#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
