@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-
 const app = express();
 const mysql2 = require('mysql2');
 const PORT =3001;
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const db = mysql2.createConnection({
     host : 'Localhost',
@@ -83,6 +84,39 @@ app.put('/produk/:id_produk', (req, res) => {
         }
         res.json({ message: 'Produk berhasil diupdate' });
     });
+});
+
+//======POST PENGGUNA======//
+app.post('/pengguna', async (req, res) => {
+    const { nama, email, password, no_hp } = req.body;
+
+    if (!nama || !email || !password ) {
+        return res.status(400).json({ message: "Nama, email, dan password wajib diisi" });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const sql = 'INSERT INTO pengguna (nama, email, password, no_hp) VALUES (?, ?, ?, ?)';
+
+        db.query(sql, [nama, email, hashedPassword, no_hp], (err, result) => {
+            if (err) {
+                if (err.code === "ER_DUP_ENTRY") {
+                    return res.status(400).json({
+                        message: "Email sudah terdaftar, gunakan email lainnya"
+                    });
+                }
+                return res.status(500).json({
+                    error: err.sqlMessage
+                });
+            }
+            res.json({
+                message: "Akun berhsil dibuat",
+                id_pengguna: result.insertId
+            });
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Gagal mengenkripsi password' });
+    }
 });
 
 //=====DELETE PRODUK=====//
